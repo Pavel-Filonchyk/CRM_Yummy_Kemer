@@ -1,16 +1,10 @@
 const initialState = {
-    dishId: '',
     moveSideBar: false,
     language: 'ru'
 }
 
 const chooseDishesReducer = (state = initialState, action) => {
     switch (action.type){ 
-        case 'CHOOSE_DISHES':
-            return {
-                ...state,
-                dishId: action.payload
-            }
         case 'MOVE_SIDE_BAR':
             return {
                 ...state,

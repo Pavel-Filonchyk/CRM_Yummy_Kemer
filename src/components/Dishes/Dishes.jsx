@@ -7,8 +7,7 @@ import { DeleteOutlined } from '@ant-design/icons'
 
 import Header from '../Header/Header'
 import { HomeOutlined } from '@ant-design/icons'
-import { getMenu } from '../../core/actions/restMenuActions'
-import { card } from '../../core/actions/buyProductActions'
+import { addToRedact } from '../../core/actions/restMenuActions'
 
 
 import style from './Dishes.module.scss'
@@ -16,50 +15,13 @@ import style from './Dishes.module.scss'
 export default function Dishes() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [form] = Form.useForm()
 
-  const menu = useSelector(({restMenuReducer: { menu }}) => menu)
-  const dishId = useSelector(({chooseItemsReducer: { dishId }}) => dishId)
-  const language = useSelector(({chooseItemsReducer: { language }}) => language)
+  const dishes = useSelector(({restMenuReducer: { dishes }}) => dishes)
 
-  const findDish = menu?.find(item => item.blockId === dishId)
-
-  const [nameDish, setNameDish] = useState('nameDishRu')
-  const [name, setName] = useState('nameRu')
-  const [discriptions, setDiscriptions] = useState('discriptionsRu')
-
-  useEffect(() => {
-    dispatch(getMenu())
-  }, [])
-
-  useEffect(() => {
-    if (language === 'ru'){
-      setNameDish('nameDishRu')
-      setName('nameRu')
-      setDiscriptions('discriptionsRu')
-    }
-    if (language === 'en'){
-      setNameDish('nameDishEn')
-      setName('nameEn')
-      setDiscriptions('discriptionsEn')
-    }
-    if (language === 'tr'){
-      setNameDish('nameDishTr')
-      setName('nameTr')
-      setDiscriptions('discriptionsTr')
-    }
-  }, [language])
-
-  const onAddToCart = (cardBlock) => {
+  const onAddToRedact = (blockItems) => {
     navigate('/redact')
-    //dispatch(card(cardBlock))
+    dispatch(addToRedact(blockItems))
   }
-
-  const onFinishLogin = (e) => {
-    console.log(e)
-    form.resetFields()
-  }
-
 
   return (
     <div className={style.wrapDishes}>
@@ -71,10 +33,10 @@ export default function Dishes() {
           <span className={style.textPage}>Main</span>
         </Link>
       </div>
-      <span className={style.mainTitle}>{findDish?.[nameDish]}</span>
+      <span className={style.mainTitle}>{dishes?.nameRu}</span>
       <div className={style.blockDishes}>
         {
-          findDish?.dishes?.filter(item => item !== null).map((item, index) => {return(
+          dishes?.dishes?.filter(item => item !== null).map((item, index) => {return(
             <div className={style.dishes} key={item.id}>
               <div className={style.wrapBtn}
                 // onClick={() => onAddToCart({
@@ -89,22 +51,17 @@ export default function Dishes() {
               </div>
               <img src={item.image} className={style.picDishes} alt=""/>
               <div className={style.wrapDiscriptions}>
-                <span className={style.title}>{item[name]}</span>
-                <span className={style.discriptions}>{item[discriptions]}</span>
+                <span className={style.title}>{item.nameRu}</span>
+                <span className={style.discriptions}>{item.discriptionsRu}</span>
               </div>
               <div className={style.wrapBuy}>
                 <span className={style.cost}>{item.amount} шт</span>
                 <span className={style.cost}>{item.cost} tl</span>
               </div>
               <div className={style.wrapBtn}
-                onClick={() => onAddToCart({
-                  name: item[name],
-                  discriptions: item[discriptions],
-                  amount: item.amount,
-                  cost: item.cost,
-                  image: item.image,
+                onClick={() => onAddToRedact({
                   id: item.id,
-                  blockId: dishId
+                  blockId: dishes?.blockId
                 })}
               >
                 <div className={style.btn}

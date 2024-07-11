@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate  } from 'react-router-dom'
 import _ from 'lodash'
-import { Button, Form, Input, Popover } from 'antd'
-import { DeleteOutlined, CloseCircleOutlined } from '@ant-design/icons'
+import { Button, Form, Input } from 'antd'
+import { CloseCircleOutlined } from '@ant-design/icons'
 
 import Header from '../Header/Header'
+import { putRedact } from '../../core/actions/restMenuActions'
+
 import style from './Redact.module.scss'
 
 export default function Redact() {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [form] = Form.useForm()
 
-    const menu = useSelector(({restMenuReducer: { menu }}) => menu)
-    const dishId = useSelector(({chooseItemsReducer: { dishId }}) => dishId)
+    const redact = useSelector(({restMenuReducer: { redact }}) => redact)
+   
+    const onFinishLogin = (e) => {
+        dispatch(putRedact({...e, id: redact?.id}))
+        navigate('/dishes')
+        form.resetFields()
+    }
+    
     
     return (
         <div className={style.wrapRedact}>
@@ -25,7 +34,11 @@ export default function Redact() {
             </div>
             <div className={style.wrapDishes}>
                 <Form
-                    //onFinish={(e) => onFinishLogin(e)}
+                    onFinish={(e) => onFinishLogin(e)}
+                    initialValues={{
+                        image: redact?.image, cost: redact?.cost, nameTr: redact?.nameTr, nameRu: redact?.nameRu, nameEn: redact?.nameEn,
+                        discriptionsTr: redact?.discriptionsTr, discriptionsRu: redact?.discriptionsRu, discriptionsEn: redact?.discriptionsEn,
+                    }}
                     form={form}
                 >
                     <span className={style.title}>Фото (url)</span>
@@ -34,7 +47,7 @@ export default function Redact() {
                     </Form.Item>
                 
                     <span className={style.title}>Наименование</span>
-                    <Form.Item name={1}>
+                    <Form.Item name='nameTr'>
                         <Input className={style.wrapInput}/>
                     </Form.Item>
                     <Form.Item name='nameRu'>

@@ -1,8 +1,15 @@
 const initialState = {
     menu: [],
+    dishes: {},
+
     postMenu: [],
     postDishes: [],
-    blockId: ''
+    blockId: '',
+
+    redact: {},
+    blockIdRedact: '',
+    filterRedact: {},
+    findDish: {}
 }
 
 const restMenuReducer = (state = initialState, action) => {
@@ -45,6 +52,44 @@ const restMenuReducer = (state = initialState, action) => {
                 ...state,
                 
             }
+        case 'CHOOSE_DISHES':
+            const dishes = state.menu?.find(item => item.blockId === action.payload)
+            return {
+                ...state,
+                dishes
+            }
+        case 'ADD_TO_REDACT':
+            const filterRedact = state.menu?.filter(item => item?.blockId === action.payload?.blockId)[0]
+            const findDish = filterRedact?.dishes?.find(item => item?.id === action.payload?.id)
+            return {
+                ...state,
+                redact: findDish,
+                blockIdRedact: action.payload?.blockId,
+                filterRedact,
+                findDish
+            }
+        case 'PUT_REDACT':
+            console.log(action.payload)
+            const newDish = {
+                nameTr: action.payload.nameTr,
+                nameRu: action.payload.nameRu,
+                nameEn: action.payload.nameEn,
+                discriptionsTr: action.payload.discriptionsTr,
+                discriptionsRu: action.payload.discriptionsRu,
+                discriptionsEn: action.payload.discriptionsEn,
+                image: action.payload.image,
+                id: action.payload.id,
+                amount: action.payload.amount,
+                cost: action.payload.cost
+                
+            }
+            const redactDishes = state.dishes?.filter(item => item.id !== action.payload.id)
+            const findIndex = state.dishes?.findIndex(item => item.id === action.payload.id)
+            redactDishes.splice(findIndex, 0, newDish)
+            return {
+                ...state,
+                dishes: redactDishes
+                }
         default: 
         return state;  
     }
