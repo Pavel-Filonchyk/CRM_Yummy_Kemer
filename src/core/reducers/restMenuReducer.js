@@ -1,75 +1,33 @@
 const initialState = {
     menu: [],
-    dishes: {},
-
-    postMenu: [],
-    postDishes: [],
-    blockId: '',
-
+    dishes: [],
     redact: {},
-    blockIdRedact: '',
-    filterRedact: {},
-    findDish: {}
+    blockId: '',
 }
 
 const restMenuReducer = (state = initialState, action) => {
     switch (action.type){ 
-        case 'POST_MENU':
-            //console.log(action.payload)
-            return {
-                ...state,
-                postMenu: action.payload
-            }
         case 'GET_MENU_SUCCESS':
             const list = Object.keys(action.payload).map(key => ({...action.payload[key], blockId: key}))
             return {
                 ...state,
                 menu: list
             }
-        case 'POST_DISHES':
-            const filter = state.menu?.filter(item => item.nameDishRu === action.payload?.nameDishRu)[0]
-            const newMenu = {
-                image: filter?.image,
-                nameDishTr: filter?.nameDishTr,
-                nameDishRu: filter?.nameDishRu,
-                nameDishEn: filter?.nameDishEn,
-                dishes: [...filter?.dishes, action.payload.dishes]
-            }
-            return {
-                ...state,
-                postDishes: newMenu,
-                blockId: filter?.blockId
-            }
-        case 'POST_DISHES_SUCCESS':
-            console.log(action.payload)
-            return {
-                ...state,
-                
-            }
-        case 'POST_DISHES_ERROR':
-            console.log(action.payload)
-            return {
-                ...state,
-                
-            }
         case 'CHOOSE_DISHES':
-            const dishes = state.menu?.find(item => item.blockId === action.payload)
+            const dishes = state.menu?.find(item => item.blockId === action.payload)?.dishes
             return {
                 ...state,
-                dishes
+                dishes,
+                blockId: action.payload
             }
         case 'ADD_TO_REDACT':
-            const filterRedact = state.menu?.filter(item => item?.blockId === action.payload?.blockId)[0]
+            const filterRedact = state.menu?.filter(item => item?.blockId === state.blockId)[0]
             const findDish = filterRedact?.dishes?.find(item => item?.id === action.payload?.id)
             return {
                 ...state,
-                redact: findDish,
-                blockIdRedact: action.payload?.blockId,
-                filterRedact,
-                findDish
+                redact: findDish
             }
         case 'PUT_REDACT':
-            console.log(action.payload)
             const newDish = {
                 nameTr: action.payload.nameTr,
                 nameRu: action.payload.nameRu,
@@ -83,13 +41,39 @@ const restMenuReducer = (state = initialState, action) => {
                 cost: action.payload.cost
                 
             }
-            const redactDishes = state.dishes?.filter(item => item.id !== action.payload.id)
-            const findIndex = state.dishes?.findIndex(item => item.id === action.payload.id)
+            const redactDishes = state.dishes?.filter(item => item?.id !== action.payload.id)
+            const findIndex = state.dishes?.findIndex(item => item?.id === action.payload.id)
             redactDishes.splice(findIndex, 0, newDish)
             return {
                 ...state,
                 dishes: redactDishes
-                }
+            }
+        case 'PUT_REDACT_SUCCESS':
+            console.log(action.payload)
+            return {
+                ...state,
+            }
+        case 'POST_REDACT':
+            return {
+                ...state,
+                dishes: [...state.dishes, action.payload]
+            }
+        case 'POST_REDACT_SUCCESS':
+            console.log(action.payload)
+            return {
+                ...state,
+            }
+        case 'DELETE_REDACT':
+            const deleteDishes = state.dishes?.filter(item => item?.id !== action.payload.id)
+            return {
+                ...state,
+               dishes: deleteDishes
+            }
+        case 'DELETE_REDACT_SUCCESS':
+            console.log(action.payload)
+            return {
+                ...state
+            }
         default: 
         return state;  
     }

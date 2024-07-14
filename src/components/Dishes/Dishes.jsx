@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import _ from 'lodash'
 import { Button, Form, Input } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 
 import Header from '../Header/Header'
 import { HomeOutlined } from '@ant-design/icons'
-import { addToRedact } from '../../core/actions/restMenuActions'
+import { addToRedact, deleteRedact } from '../../core/actions/restMenuActions'
 
 
 import style from './Dishes.module.scss'
@@ -17,10 +16,13 @@ export default function Dishes() {
   const navigate = useNavigate()
 
   const dishes = useSelector(({restMenuReducer: { dishes }}) => dishes)
-
-  const onAddToRedact = (blockItems) => {
+  
+  const onAddToRedact = (id) => {
     navigate('/redact')
-    dispatch(addToRedact(blockItems))
+    dispatch(addToRedact(id))
+  }
+  const deleteDish = (id) => {
+    dispatch(deleteRedact(id))
   }
 
   return (
@@ -36,17 +38,12 @@ export default function Dishes() {
       <span className={style.mainTitle}>{dishes?.nameRu}</span>
       <div className={style.blockDishes}>
         {
-          dishes?.dishes?.filter(item => item !== null).map((item, index) => {return(
+          dishes?.filter(item => item !== null).map((item, index) => {return(
             <div className={style.dishes} key={item.id}>
-              <div className={style.wrapBtn}
-                // onClick={() => onAddToCart({
-                //   id: item.id,
-                //   blockId: dishId
-                // })}
-              >
+              <div className={style.wrapBtn}>
                 <DeleteOutlined className={style.btn}
                   style={{fontSize: 28}}
-                  //onClick={() => dispatch(deleteDish({id: item.id}))}
+                  onClick={() => deleteDish({id: item.id})}
                 />
               </div>
               <img src={item.image} className={style.picDishes} alt=""/>
@@ -60,8 +57,7 @@ export default function Dishes() {
               </div>
               <div className={style.wrapBtn}
                 onClick={() => onAddToRedact({
-                  id: item.id,
-                  blockId: dishes?.blockId
+                  id: item.id
                 })}
               >
                 <div className={style.btn}
@@ -73,6 +69,12 @@ export default function Dishes() {
             </div>   
           )})
         }
+      </div>
+      <div className={style.wrapBtn}>
+          <div className={style.btn}
+            style={{width: 208}}
+            onClick={onAddToRedact}
+          >Добавить</div>
       </div>
     </div>
   )

@@ -1,13 +1,15 @@
 import { all } from 'redux-saga/effects'
 
-import watcherPostMenu from './postMenuSaga'
 import watcherGetMenu from './getMenuSaga'
-import watcherPostDishes from './postDishesSaga'
+import watcherPutRedact from './putRedactSaga'
+import watcherPostRedact from './postRedactSaga'
+import watcherDeleteRedact from './deleteRedactSaga'
 
 export default function* rootSaga() {
     yield all([
-        watcherPostMenu(),
         watcherGetMenu(),
-        watcherPostDishes()
+        watcherPutRedact(),
+        watcherPostRedact(),
+        watcherDeleteRedact()
     ])
 }
