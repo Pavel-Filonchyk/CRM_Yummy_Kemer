@@ -27,7 +27,7 @@ export default function Redact() {
         navigate('/dishes')
         form.resetFields()
     }
-    
+
     return (
         <div className={style.wrapRedact}>
             <Header/>

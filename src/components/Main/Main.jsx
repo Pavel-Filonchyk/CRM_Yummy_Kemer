@@ -20,7 +20,6 @@ export default function Main() {
     const menu = useSelector(({restMenuReducer: { menu }}) => menu)
 
     const [user, setUser] = useState(null)
-    const [userGoogle, setUserGoogle] = useState(null)
     const [showModal, setShowModal] = useState(true)
     const [nameDish, setNameDish] = useState('nameDishRu')
 
@@ -33,14 +32,8 @@ export default function Main() {
     }, [user])
 
     useEffect(() => {
-        signInWithEmailAndPassword(auth, 'p_filonchyk@mail.ru', 'Summer2024')
-        .then(data => setUser(data))
-        .catch(data => console.log(data))
-    }, [])
-
-    useEffect(() => {
         const setItemStorage = async () => {
-            if (userGoogle === 'filonchykpavel@gmail.com' || userGoogle === 'sonmeztanya@gmail.com'){
+            if (user?.user.email === "filonchykpavel@gmail.com" || user?.user.email === "sonmeztanya@gmail.com"){
                 try {
                     await localStorage.setItem('auth', 'email')
                 } catch (e) {
@@ -49,7 +42,7 @@ export default function Main() {
             }
         }
         setItemStorage()
-    }, [userGoogle])
+    }, [user])
     useEffect(() => {
         const getItemStorage = async () => {
             try {
@@ -69,7 +62,7 @@ export default function Main() {
     const onAuth = () => {
         const provider = new GoogleAuthProvider()
         signInWithPopup(auth, provider)
-        .then(result => setUserGoogle(result.user.email))
+        .then(data => setUser(data))
         .catch((error) => {
             console.log("Caught error Popup closed")
         })
