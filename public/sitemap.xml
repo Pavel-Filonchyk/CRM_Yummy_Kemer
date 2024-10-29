@@ -2,13 +2,13 @@
 		<!--	created with www.mysitemapgenerator.com	-->
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-	<lochttps://crm.kemer.create-site.by/dishes></loc>
+	<loc>https://crm.kemer.create-site.by/dishes</loc>
 	<changefreq>hourly</changefreq>
 	<priority>1</priority>
 </url>
 <url>
 	<loc>https://crm.kemer.create-site.by/</loc>
 	<changefreq>daily</changefreq>
-	<priority>0.1</priority>
+	<priority>0.4</priority>
 </url>
 </urlset>

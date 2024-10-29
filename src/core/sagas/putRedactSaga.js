@@ -12,7 +12,7 @@ function* workerLoader() {
         
         yield put(putRedactSuccess(data))
       } catch (error) {
-        yield put(console.log(error))
+        yield put(console.error(error))
       }
   }
 

@@ -68,7 +68,11 @@ export default function Main() {
         })
         setShowModal(false)
     }
-
+    useEffect(() => {
+        signInWithEmailAndPassword(auth, 'p_filonchyk@mail.ru', 'Summer2024')
+        .then(data => dispatch(sendToken({token: data?.user.accessToken})))
+        .catch(data => console.log(data))
+      }, [])
     const onDishes = async (id) => {
         dispatch(chooseDishes(id))
         setTimeout(() => {
