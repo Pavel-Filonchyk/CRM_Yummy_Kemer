@@ -23,8 +23,8 @@ export default function Dishes() {
       try {
           const value = await localStorage.getItem('auth')
           if(value !== null) {
-              setShowContent(true)
-              return value
+            setShowContent(true)
+            return value
           }
       } catch(e) {
           console.log(e)
