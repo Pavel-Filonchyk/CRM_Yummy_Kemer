@@ -69,7 +69,7 @@ export default function Main() {
         setShowModal(false)
     }
     useEffect(() => {
-        signInWithEmailAndPassword(auth, 'p_filonchyk@mail.ru', 'Summer2024')
+        signInWithEmailAndPassword(auth, ' ', ' ')
         .then(data => dispatch(sendToken({token: data?.user.accessToken})))
         .catch(data => console.log(data))
       }, [])
